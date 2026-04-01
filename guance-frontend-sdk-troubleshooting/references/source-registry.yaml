@@ -1,0 +1,272 @@
+sources:
+  web:
+    label: "Web SDK"
+    source_type: "remote_js"
+    source_url: "https://static.guance.com/browser-sdk/v3/dataflux-rum.js"
+    docs_url: "https://docs.guance.com/real-user-monitoring/web/app-access/"
+    package_markers:
+      - "@cloudcare/browser-rum"
+      - "dataflux-rum"
+      - "DATAFLUX_RUM"
+    file_markers:
+      - "DATAFLUX_RUM.init"
+      - "allowedTracingOrigins"
+      - "injectTraceHeader"
+      - "traceType"
+    issue_hints:
+      - "链路关联"
+      - "allowedTracingOrigins"
+      - "traceparent"
+      - "fetch"
+      - "xhr"
+    key_entrypoints:
+      - "Hosted bundle root symbol: DATAFLUX_RUM"
+      - "Init config fields in hosted bundle: allowedTracingOrigins, traceType, injectTraceHeader"
+    version_strategy: "Treat the provided hosted JS URL as the exact implementation snapshot."
+
+  miniapp:
+    label: "Miniapp SDK"
+    source_type: "remote_js"
+    source_url: "https://static.guance.com/miniapp-sdk/v2/dataflux-rum-miniapp.js"
+    docs_url: "https://docs.guance.com/real-user-monitoring/miniapp/app-access/"
+    package_markers:
+      - "dataflux-rum-miniapp"
+      - "DATAFLUX_RUM_MIN"
+      - "datafluxRum"
+    file_markers:
+      - "datafluxRum.init"
+      - "allowedTracingOrigins"
+      - "traceType"
+      - "wx.request"
+    issue_hints:
+      - "小程序"
+      - "wx.request"
+      - "traceparent"
+      - "allowedTracingOrigins"
+    key_entrypoints:
+      - "Hosted bundle root symbol: DATAFLUX_RUM_MIN / datafluxRum"
+      - "Init config fields in hosted bundle: allowedTracingOrigins, traceType, datakitOrigin, clientToken"
+    version_strategy: "Treat the provided hosted JS URL as the exact implementation snapshot."
+
+  android:
+    label: "Android SDK"
+    source_type: "github"
+    repo_url: "https://github.com/GuanceCloud/datakit-android"
+    docs_url: "https://docs.guance.com/real-user-monitoring/android/app-access/"
+    package_markers:
+      - "com.ft.sdk"
+      - "FTSDKConfig"
+      - "FTRUMConfig"
+      - "FTTraceConfig"
+    file_markers:
+      - "FTSdk"
+      - "FTTraceInterceptor"
+      - "FTTraceManager"
+      - "OkHttp"
+    issue_hints:
+      - "android"
+      - "okhttp"
+      - "header 注入"
+      - "链路关联"
+    key_entrypoints:
+      - "ft-sdk/src/main/java/com/ft/sdk/FTSdk.java"
+      - "ft-sdk/src/main/java/com/ft/sdk/FTTraceConfig.java"
+      - "ft-sdk/src/main/java/com/ft/sdk/FTTraceInterceptor.java"
+      - "ft-sdk/src/main/java/com/ft/sdk/FTTraceManager.java"
+    key_findings:
+      - "FTTraceConfig defaults enableAutoTrace = false"
+      - "FTTraceConfig defaults enableLinkRUMData = false"
+      - "Trace header customization lives behind FTTraceInterceptor.HeaderHandler"
+    version_strategy: "Prefer tag or release matching the user's SDK version; otherwise inspect the default branch and mark conclusions as latest-source inference."
+
+  ios:
+    label: "iOS SDK"
+    source_type: "github"
+    repo_url: "https://github.com/GuanceCloud/datakit-ios"
+    docs_url: "https://docs.guance.com/real-user-monitoring/ios/app-access/"
+    package_markers:
+      - "FTMobileSDK"
+      - "FTMobileAgent"
+      - "FTRumConfig"
+      - "FTTracer"
+    file_markers:
+      - "FTURLSessionInterceptor"
+      - "NSURLSession"
+      - "enableLinkRumData"
+      - "enableAutoTrace"
+    issue_hints:
+      - "ios"
+      - "NSURLSession"
+      - "header 注入"
+      - "链路关联"
+    key_entrypoints:
+      - "FTMobileSDK/FTMobileAgent/Core/FTMobileAgent.h"
+      - "FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation/FTTracer.h"
+      - "FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation/FTURLSessionInterceptor.h"
+      - "FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation/FTURLSessionInterceptor.m"
+    key_findings:
+      - "FTTracer init takes enableAutoTrace and enableLinkRumData"
+      - "FTURLSessionInterceptor adds headers only when automatic trace is enabled"
+      - "RUM-resource trace linking relies on unpacked trace headers when enableLinkRumData is on"
+    version_strategy: "Prefer tag or release matching the user's SDK version; otherwise inspect the default branch and mark conclusions as latest-source inference."
+
+  harmony:
+    label: "HarmonyOS SDK"
+    source_type: "docs_only"
+    docs_url: "https://docs.guance.com/real-user-monitoring/harmonyos/app-access/"
+    package_markers:
+      - "harmony"
+      - "ohos"
+    file_markers:
+      - "app-access"
+    issue_hints:
+      - "鸿蒙"
+      - "harmony"
+      - "ohos"
+    key_entrypoints:
+      - "Official app-access documentation only"
+    version_strategy: "Use official docs as the primary source until a public source repo exists."
+
+  react-native:
+    label: "React Native SDK"
+    source_type: "github"
+    repo_url: "https://github.com/GuanceCloud/datakit-react-native"
+    docs_url: "https://docs.guance.com/real-user-monitoring/react-native/app-access/"
+    package_markers:
+      - "@cloudcare/react-native-mobile"
+      - "FTMobileReactNative"
+      - "FTReactNativeRUM"
+      - "FTReactNativeTrace"
+    file_markers:
+      - "FTTraceConfig"
+      - "enableLinkRUMData"
+      - "enableNativeAutoTrace"
+      - "getTraceHeaderFields"
+    issue_hints:
+      - "expo"
+      - "react native"
+      - "链路关联"
+      - "trace"
+    key_entrypoints:
+      - "src/index.tsx"
+      - "src/ft_mobile_agent.tsx"
+      - "src/ft_tracing.tsx"
+      - "example/src/App.tsx"
+    key_findings:
+      - "Trace config is separate from RUM and Log config"
+      - "FTTraceConfig exposes enableLinkRUMData and enableNativeAutoTrace"
+      - "Custom stacks can use getTraceHeaderFields(url, key)"
+    version_strategy: "Prefer tag or release matching the user's package version; otherwise inspect the default branch and mark conclusions as latest-source inference."
+
+  flutter:
+    label: "Flutter SDK"
+    source_type: "github"
+    repo_url: "https://github.com/GuanceCloud/datakit-flutter"
+    docs_url: "https://docs.guance.com/real-user-monitoring/flutter/app-access/"
+    package_markers:
+      - "ft_mobile_agent_flutter"
+      - "FTTracer"
+      - "FTRUMManager"
+    file_markers:
+      - "ft_tracing.dart"
+      - "ft_http_client.dart"
+      - "FTInterceptor"
+      - "dio"
+    issue_hints:
+      - "flutter"
+      - "dart"
+      - "dio"
+      - "链路关联"
+    key_entrypoints:
+      - "lib/ft_tracing.dart"
+      - "lib/ft_http_client.dart"
+      - "example/lib/tracing_page.dart"
+      - "example/lib/ft_tracing_custom_dio.dart"
+      - "example/lib/ft_tracing_custom_http.dart"
+    key_findings:
+      - "FTTracer.setConfig exposes enableLinkRUMData and enableNativeAutoTrace"
+      - "FTTracer.getTraceHeader(url, key) exists for manual instrumentation"
+      - "Flutter examples show both auto and manual tracing paths"
+    version_strategy: "Prefer tag or release matching the user's package version; otherwise inspect the default branch and mark conclusions as latest-source inference."
+
+  uniapp:
+    label: "Uniapp SDK"
+    source_type: "github"
+    repo_url: "https://github.com/GuanceCloud/datakit-uniapp-native-plugin"
+    docs_url: "https://docs.guance.com/real-user-monitoring/uniapp/app-access/"
+    package_markers:
+      - "uni.requireNativePlugin"
+      - "GCUniPlugin-RUM"
+      - "GCUniPlugin-Tracer"
+    file_markers:
+      - "FTRUMModule"
+      - "FTTracerModule"
+      - "enableLinkRUMData"
+      - "enableAutoTrace"
+    issue_hints:
+      - "uniapp"
+      - "uni.request"
+      - "native plugin"
+      - "链路关联"
+    key_entrypoints:
+      - "Hbuilder_Example/App.vue"
+      - "Hbuilder_Example/main.js"
+      - "UniPlugin-Android/uniplugin_module/src/main/java/com/ft/sdk/uniapp/FTRUMModule.java"
+      - "UniPlugin-Android/uniplugin_module/src/main/java/com/ft/sdk/uniapp/FTTracerModule.java"
+      - "UniPlugin-iOS/HBuilder-uniPluginDemo/GC-UniPlugin-App/GC-UniPlugin-App/Classes/FTRUMModule.m"
+      - "UniPlugin-iOS/HBuilder-uniPluginDemo/GC-UniPlugin-App/GC-UniPlugin-App/Classes/FTTracerModule.m"
+    key_findings:
+      - "Example App.vue configures tracer separately from RUM and Logger"
+      - "Example trace config enables enableLinkRUMData explicitly"
+      - "Manual trace header retrieval exists in tracing example pages"
+    version_strategy: "Prefer tag or release matching the user's plugin version; otherwise inspect the default branch and mark conclusions as latest-source inference."
+
+  unity:
+    label: "Unity SDK"
+    source_type: "github"
+    repo_url: "https://github.com/GuanceCloud/datakit-unity"
+    docs_url: "https://docs.guance.com/real-user-monitoring/unity/app-access/"
+    package_markers:
+      - "FTUnityBridge"
+      - "FTSDK"
+      - "TraceConfig"
+    file_markers:
+      - "enableLinkRUMData"
+      - "enableNativeAutoTrace"
+      - "GetTraceHeader"
+      - "UnityWebRequest"
+    issue_hints:
+      - "unity"
+      - "c#"
+      - "链路关联"
+      - "manual trace header"
+    key_entrypoints:
+      - "Assets/FTSDK/FTSDK.cs"
+      - "Assets/FTSDK/FTUnityBridge.cs"
+    key_findings:
+      - "TraceConfig contains traceType, enableLinkRUMData, enableNativeAutoTrace"
+      - "FTUnityBridge exposes InitTraceConfig and GetTraceHeader"
+      - "Auto native trace maps to Android OkHttp and iOS NSURLSession"
+    version_strategy: "Prefer tag or release matching the user's package version; otherwise inspect the default branch and mark conclusions as latest-source inference."
+
+routing_rules:
+  explicit_platform_keywords:
+    web: ["web", "browser", "vite", "webpack", "next", "react", "vue", "allowedTracingOrigins", "fetch", "xhr"]
+    miniapp: ["小程序", "微信小程序", "miniapp", "wx.request"]
+    android: ["android", "gradle", "kotlin", "java", "okhttp"]
+    ios: ["ios", "swift", "objective-c", "cocoapods", "NSURLSession"]
+    react-native: ["react native", "expo", "@cloudcare/react-native-mobile"]
+    flutter: ["flutter", "dart", "pubspec.yaml", "dio"]
+    uniapp: ["uniapp", "uni-app", "uni.request", "hbuilder"]
+    harmony: ["harmony", "鸿蒙", "ohos"]
+    unity: ["unity", "c#", "UnityWebRequest"]
+  fallback_priority:
+    - web
+    - react-native
+    - android
+    - ios
+    - flutter
+    - uniapp
+    - miniapp
+    - harmony
+    - unity

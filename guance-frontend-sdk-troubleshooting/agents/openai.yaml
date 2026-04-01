@@ -1,0 +1,4 @@
+interface:
+  display_name: "Guance FE SDK Troubleshooting"
+  short_description: "Diagnose Guance frontend SDK integration issues"
+  default_prompt: "Use $guance-frontend-sdk-troubleshooting to analyze why our Guance frontend SDK data is missing or malformed."

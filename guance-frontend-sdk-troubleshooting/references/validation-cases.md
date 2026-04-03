@@ -91,7 +91,7 @@ Prompt:
 Expected direction:
 
 - Route to `react-native` without asking the user again
-- Inspect RN trace config before discussing web allowlists
+- Inspect RN trace config through the native workflow before discussing web allowlists
 - Check whether `FTReactNativeTrace.setConfig()` is ever called with `enableLinkRUMData` and `enableNativeAutoTrace`
 
 ## Case 10: Android auto trace expectation
@@ -102,8 +102,8 @@ Prompt:
 Expected direction:
 
 - Route to `android`
-- Inspect `FTTraceConfig` and OkHttp-related entrypoints
-- Check whether auto trace and RUM linkage are enabled instead of assuming they are on by default
+- Inspect `FTTraceConfig` and OkHttp-related entrypoints through the native workflow
+- Check the actual config path for auto trace and RUM linkage instead of assuming they are on by default
 
 ## Case 11: Ambiguous mobile issue
 
@@ -115,3 +115,4 @@ Expected direction:
 - Try quick inference from repo and package markers first
 - If platform is still unclear, ask one short clarification question
 - Do not inspect all mobile repos in parallel by default
+- Do not fall back to browser-only checks until the platform is identified

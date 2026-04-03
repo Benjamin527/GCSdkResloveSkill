@@ -7,7 +7,7 @@ description: Use when analyzing Guance SDK integration issues across web, miniap
 
 ## Overview
 
-Use this skill to debug Guance client-side SDK integrations in a disciplined way across web and mobile-adjacent platforms. Start from evidence, route to the correct platform source, inspect the smallest set of relevant entrypoints, then narrow to the likely root cause instead of guessing from symptoms.
+Use this skill to debug Guance client-side SDK integrations in a disciplined way across web and mobile-adjacent platforms. Start from evidence, route to the correct platform source, choose the matching web or native workflow, inspect the smallest relevant set of entrypoints, then narrow to the likely root cause instead of guessing from symptoms.
 
 ## When To Use
 
@@ -27,6 +27,7 @@ Do not use this skill for backend DataKit deployment, server-side tracing with n
 - Gather evidence before concluding. If the user has not shared enough proof, ask for the minimum missing artifacts first.
 - Route to the correct platform before reading source. Do not inspect every SDK repo by default.
 - Separate `init`, `transport`, `ingest`, `feature`, and `postprocess` failures.
+- For native-family platforms, prefer platform logs, bridge config, and interceptor state over browser-only checks.
 - Prefer official Guance behavior and public source over memory.
 - Prefer version-matched source when available. If the user version is unknown, say that source analysis is based on the latest visible implementation.
 - Read only the 2 to 5 most relevant source entrypoints for the chosen platform unless evidence forces a wider search.
@@ -93,7 +94,9 @@ For platform selection, source entrypoints, and version handling, read [platform
 
 For per-platform repository and key file metadata, read [source-registry.yaml](references/source-registry.yaml).
 
-For `init` and `transport`, read [diagnostic-workflow.md](references/diagnostic-workflow.md).
+For `web` and `miniapp` `init` and `transport`, read [diagnostic-workflow.md](references/diagnostic-workflow.md).
+
+For `android`, `ios`, `react-native`, `flutter`, `uniapp`, `unity`, and `harmony` `init` and `transport`, read [native-diagnostic-workflow.md](references/native-diagnostic-workflow.md).
 
 For signal-specific gaps, read [signal-matrix.md](references/signal-matrix.md).
 
@@ -111,7 +114,7 @@ End with this shape:
 4. The next smallest confirming step
 5. A concrete fix snippet or configuration change if the cause is known
 
-## High-Value Checks
+## Fast Checks
 
 Use these checks often because they eliminate many branches quickly:
 
@@ -124,15 +127,7 @@ Use these checks often because they eliminate many branches quickly:
 - Whether web or miniapp origin allowlists include the target API origin
 - Whether sourcemap upload uses the same version and environment as the minified bundle
 
-## Common Failure Patterns
-
-- Data exists in transport, but the user is searching another environment or app
-- SDK works in dev but is gated off in production build or vice versa
-- Base RUM works, but replay or view tracking is disabled by separate options
-- Trace config was never initialized for that platform, so RUM has errors but no trace linkage
-- Automatic trace is expected, but the stack uses a custom HTTP client that needs manual `getTraceHeader` style integration
-- Frontend trace headers are not injected because the API origin is not in the allowlist on web or miniapp
-- Sourcemap upload succeeded for one release, but the bundle uses another version string
+If the case still looks broad, use the platform-specific priority checks in [source-registry.yaml](references/source-registry.yaml) plus the signal branches in [signal-matrix.md](references/signal-matrix.md) before widening the search.
 
 ## Response Style
 

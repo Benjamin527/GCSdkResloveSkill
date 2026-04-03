@@ -73,10 +73,10 @@ sources:
       - "ft-sdk/src/main/java/com/ft/sdk/FTTraceConfig.java"
       - "ft-sdk/src/main/java/com/ft/sdk/FTTraceInterceptor.java"
       - "ft-sdk/src/main/java/com/ft/sdk/FTTraceManager.java"
-    key_findings:
-      - "FTTraceConfig defaults enableAutoTrace = false"
-      - "FTTraceConfig defaults enableLinkRUMData = false"
-      - "Trace header customization lives behind FTTraceInterceptor.HeaderHandler"
+    priority_checks:
+      - "Check FTTraceConfig defaults and constructor values for enableAutoTrace in the SDK version under review."
+      - "Check FTTraceConfig defaults and constructor values for enableLinkRUMData in the SDK version under review."
+      - "Check FTTraceInterceptor.HeaderHandler only when custom trace header behavior is part of the symptom."
     version_strategy: "Prefer tag or release matching the user's SDK version; otherwise inspect the default branch and mark conclusions as latest-source inference."
 
   ios:
@@ -104,10 +104,10 @@ sources:
       - "FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation/FTTracer.h"
       - "FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation/FTURLSessionInterceptor.h"
       - "FTMobileSDK/FTSDKCore/URLSessionAutoInstrumentation/FTURLSessionInterceptor.m"
-    key_findings:
-      - "FTTracer init takes enableAutoTrace and enableLinkRumData"
-      - "FTURLSessionInterceptor adds headers only when automatic trace is enabled"
-      - "RUM-resource trace linking relies on unpacked trace headers when enableLinkRumData is on"
+    priority_checks:
+      - "Check the FTTracer init or config path for the SDK version under review, including enableAutoTrace and enableLinkRumData."
+      - "Check FTURLSessionInterceptor when the symptom involves missing automatic header injection."
+      - "Check how RUM-resource linking is derived from trace headers before claiming linkage is enabled."
     version_strategy: "Prefer tag or release matching the user's SDK version; otherwise inspect the default branch and mark conclusions as latest-source inference."
 
   harmony:
@@ -152,10 +152,10 @@ sources:
       - "src/ft_mobile_agent.tsx"
       - "src/ft_tracing.tsx"
       - "example/src/App.tsx"
-    key_findings:
-      - "Trace config is separate from RUM and Log config"
-      - "FTTraceConfig exposes enableLinkRUMData and enableNativeAutoTrace"
-      - "Custom stacks can use getTraceHeaderFields(url, key)"
+    priority_checks:
+      - "Check trace config separately from RUM and Log config for the package version under review."
+      - "Check whether FTTraceConfig enables enableLinkRUMData and enableNativeAutoTrace in the actual init path."
+      - "Check getTraceHeaderFields(url, key) only when the app uses a custom network stack."
     version_strategy: "Prefer tag or release matching the user's package version; otherwise inspect the default branch and mark conclusions as latest-source inference."
 
   flutter:
@@ -183,10 +183,10 @@ sources:
       - "example/lib/tracing_page.dart"
       - "example/lib/ft_tracing_custom_dio.dart"
       - "example/lib/ft_tracing_custom_http.dart"
-    key_findings:
-      - "FTTracer.setConfig exposes enableLinkRUMData and enableNativeAutoTrace"
-      - "FTTracer.getTraceHeader(url, key) exists for manual instrumentation"
-      - "Flutter examples show both auto and manual tracing paths"
+    priority_checks:
+      - "Check FTTracer.setConfig for enableLinkRUMData and enableNativeAutoTrace in the SDK version under review."
+      - "Check FTTracer.getTraceHeader(url, key) when the app uses manual HTTP instrumentation."
+      - "Check both auto and manual tracing examples before assuming the app is on the default path."
     version_strategy: "Prefer tag or release matching the user's package version; otherwise inspect the default branch and mark conclusions as latest-source inference."
 
   uniapp:
@@ -215,10 +215,10 @@ sources:
       - "UniPlugin-Android/uniplugin_module/src/main/java/com/ft/sdk/uniapp/FTTracerModule.java"
       - "UniPlugin-iOS/HBuilder-uniPluginDemo/GC-UniPlugin-App/GC-UniPlugin-App/Classes/FTRUMModule.m"
       - "UniPlugin-iOS/HBuilder-uniPluginDemo/GC-UniPlugin-App/GC-UniPlugin-App/Classes/FTTracerModule.m"
-    key_findings:
-      - "Example App.vue configures tracer separately from RUM and Logger"
-      - "Example trace config enables enableLinkRUMData explicitly"
-      - "Manual trace header retrieval exists in tracing example pages"
+    priority_checks:
+      - "Check tracer setup separately from RUM and Logger in the plugin version under review."
+      - "Check whether enableLinkRUMData is explicitly set in the actual tracer config."
+      - "Check manual trace header retrieval only when the app uses custom request plumbing."
     version_strategy: "Prefer tag or release matching the user's plugin version; otherwise inspect the default branch and mark conclusions as latest-source inference."
 
   unity:
@@ -243,10 +243,10 @@ sources:
     key_entrypoints:
       - "Assets/FTSDK/FTSDK.cs"
       - "Assets/FTSDK/FTUnityBridge.cs"
-    key_findings:
-      - "TraceConfig contains traceType, enableLinkRUMData, enableNativeAutoTrace"
-      - "FTUnityBridge exposes InitTraceConfig and GetTraceHeader"
-      - "Auto native trace maps to Android OkHttp and iOS NSURLSession"
+    priority_checks:
+      - "Check TraceConfig fields such as traceType, enableLinkRUMData, and enableNativeAutoTrace in the package version under review."
+      - "Check FTUnityBridge InitTraceConfig and GetTraceHeader when tracing setup is in scope."
+      - "Check the platform bridge path before assuming native auto trace is active on Android or iOS."
     version_strategy: "Prefer tag or release matching the user's package version; otherwise inspect the default branch and mark conclusions as latest-source inference."
 
 routing_rules:

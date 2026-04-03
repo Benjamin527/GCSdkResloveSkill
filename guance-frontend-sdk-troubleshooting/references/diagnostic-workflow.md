@@ -1,16 +1,17 @@
-# Diagnostic Workflow
+# Diagnostic Workflow (Web and Miniapp)
 
-Use this file for init, transport, and ingestion style failures.
+Use this file for `web` and `miniapp` init, transport, and ingestion style failures.
 
 ## Step 1: Confirm runtime and init path
 
-Check whether the SDK init code actually executes in the browser runtime.
+Check whether the SDK init code actually executes in the browser or miniapp runtime.
 
 Common issues:
 
 - Init placed in code that never loads on the affected page
 - SSR frameworks invoking browser-only code on the server
 - Build-time environment guards disabling init in the deployed bundle
+- Miniapp lifecycle code never reaching the page or app hook where init should run
 - Exceptions during init caused by bad config or missing globals
 
 Evidence to prefer:
@@ -21,16 +22,16 @@ Evidence to prefer:
 
 ## Step 2: Confirm endpoint model
 
-Guance browser SDK access is usually configured in one of two ways:
+Guance browser-style SDK access is usually configured in one of two ways:
 
 - Direct Guance DataWay style access using site and client token
 - DataKit style access using a DataKit origin
 
 If the user mixes configuration models, requests may hit the wrong target or never authenticate correctly. Confirm which path the project intends to use before checking anything else.
 
-## Step 3: Confirm browser request behavior
+## Step 3: Confirm request behavior
 
-Look for SDK requests in DevTools Network.
+Look for SDK requests in DevTools Network or the platform's request inspector.
 
 Interpretation:
 
@@ -45,6 +46,7 @@ High-value transport checks:
 - Status code
 - CSP violation messages
 - CORS failure text
+- Miniapp legal-domain or platform request-policy failures
 - Reverse proxy rewrites
 - HTTP to HTTPS mixed content
 
@@ -80,8 +82,9 @@ Once base transport is proven healthy, switch to [signal-matrix.md](signal-matri
 Use official Guance docs before a final answer:
 
 - Web app access: https://docs.guance.com/real-user-monitoring/web/app-access/
-- Session replay: https://docs.guance.com/real-user-monitoring/session-replay/access/
-- Browser logs: https://docs.guance.com/logs/browser-log/access/
+- Miniapp app access: https://docs.guance.com/real-user-monitoring/miniapp/app-access/
+- Session replay: https://docs.guance.com/real-user-monitoring/session-replay/web/
+- Browser logs: https://docs.guance.com/logs/browser-collection/
 - Sourcemap: https://docs.guance.com/real-user-monitoring/sourcemap/
 
 If a doc detail conflicts with memory, trust the doc and say so.

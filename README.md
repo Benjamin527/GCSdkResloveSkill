@@ -1,4 +1,4 @@
-# GCSdkResloveSkill
+# GCSdkResolveSkill
 
 Installable Codex skill for troubleshooting Guance SDK integration issues across web, miniapp, React Native, Android, iOS, Flutter, uniapp, HarmonyOS, and Unity.
 
@@ -18,6 +18,7 @@ If you are using the built-in GitHub installer flow, install that path from this
 ## What It Does
 
 - Routes to the correct Guance client platform before source inspection
+- Splits browser-style and native-style diagnostics so platform checks stay relevant
 - Uses platform-specific public source or docs as evidence
 - Helps diagnose no-data, partial-data, trace-linkage, replay, log, and sourcemap issues
 - Includes a source registry covering Web, Miniapp, Android, iOS, HarmonyOS, React Native, Flutter, uniapp, and Unity

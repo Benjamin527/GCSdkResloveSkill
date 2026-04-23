@@ -1,0 +1,4 @@
+version: 1
+display_name: Document to Image2 Prompt
+short_description: Turn docs and articles into copy-ready GPT Image 2 prompts.
+default_prompt: Convert the provided document into a concise, high-quality GPT Image 2 prompt for an explanation image or infographic.
